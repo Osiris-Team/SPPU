@@ -1,38 +1,27 @@
 ---
 name: Bug report
-about: Create a report to help us improve
+about: Help making AutoPlug better.
 title: ''
 labels: ''
 assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+**Log**
+```log
+Extract relevant information from your log and insert it here. Logs are usually located at /autoplug/logs.
+The log contains your system details at some point. If possible you should insert them here too.
+It also contains warnings with stack traces. Insert relevant warnings and other messages here.
+```
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+**Expected**
+What did you expect to happen.
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+**Actual**
+What did actually happen.
+
+**Steps**
+(Optional) Steps to reproduce the behaviour.
 
 **Screenshots**
-If applicable, add screenshots to help explain your problem.
-
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
-
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
-
-**Additional context**
-Add any other context about the problem here.
+(Optional) Screenshots to help explain your problem. You can copy and paste them here.
