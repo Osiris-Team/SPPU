@@ -7,6 +7,7 @@ Spigot Premium Plugins Updater
  - Download the [startup script](https://github.com/Osiris-Team/SPPU/releases) for your servers operating system.
    - The startup file for Windows ends with .cmd
    - The startup file for Linux/Mac/etc. ends with .sh
+   - Alternatively you can create the startup script by yourself and add the following: `java -jar SPPU.jar`
  - Run the startup script. 
 
 ### Read the below, it's important!
