@@ -14,6 +14,7 @@ import com.osiris.dyml.exceptions.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -21,9 +22,14 @@ import static com.osiris.SPPU.utils.GD.CONFIG;
 import static com.osiris.SPPU.utils.GD.SPPU_DIR;
 
 public class Main {
+    public static boolean isDEBUG;
 
     public static void main(String[] args) throws NotLoadedException, IOException, IllegalKeyException, DuplicateKeyException, DYReaderException, IllegalListException, JLineLinkException, DYWriterException, InterruptedException {
-        new AL().start("SPPU", false, new File(SPPU_DIR + "/logs"), false);
+        for (String arg :
+                args) {
+            if (arg.equals("debug")) isDEBUG = true;
+        }
+        new AL().start("SPPU", isDEBUG, new File(SPPU_DIR + "/logs"), false);
         CONFIG = new Config(SPPU_DIR + "/config.yml");
         if (CONFIG.getFile().length() == 0) { // First run, enter setup:
             Scanner scanner = new Scanner(System.in);

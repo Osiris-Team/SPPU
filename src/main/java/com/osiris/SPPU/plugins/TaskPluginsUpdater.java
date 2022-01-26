@@ -8,6 +8,7 @@
 
 package com.osiris.SPPU.plugins;
 
+import com.osiris.SPPU.Main;
 import com.osiris.SPPU.plugins.search.SearchMaster;
 import com.osiris.SPPU.plugins.search.SearchResult;
 import com.osiris.SPPU.utils.GD;
@@ -22,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jsoup.nodes.Document;
 
 import java.io.File;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -278,7 +280,9 @@ public class TaskPluginsUpdater extends BetterThread {
         // Do premium stuff
         if (!updatablePremiumSpigotPlugins.isEmpty()) {
             setStatus("Logging in to spigotmc.org...");
-            try (PlaywrightWindow window = new HBrowser().openCustomWindow().temporaryUserDataDir(true).headless(false).buildPlaywrightWindow()) {
+            OutputStream debugOut = null;
+            if (Main.isDEBUG) debugOut = System.out;
+            try (PlaywrightWindow window = new HBrowser().openCustomWindow().debugOutputStream(debugOut).temporaryUserDataDir(true).headless(false).buildPlaywrightWindow()) {
                 SpigotAuthenticator spigotAuthenticator = new SpigotAuthenticator();
                 spigotAuthenticator.attemptLoginForWindow(window, spigotUsername.asString(), spigotPassword.asString(),
                         spigotUsernameOld.asString(), spigotPasswordOld.asString()); // Throws exception on login fail
