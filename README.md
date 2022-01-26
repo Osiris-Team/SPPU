@@ -4,7 +4,7 @@ Spigot Premium Plugins Updater
 ### Installation
  - Minimum Java 8 required
  - Download the [SPPU.jar](https://github.com/Osiris-Team/SPPU/releases/latest) and put it into your servers root directory
- - Download the [startup script](https://github.com/Osiris-Team/SPPU/releases) for your servers operating system.
+ - Download the [startup script](https://github.com/Osiris-Team/SPPU/releases/download/0.3/startup-scripts.zip) for your servers operating system.
    - The startup file for Windows ends with .cmd
    - The startup file for Linux/Mac/etc. ends with .sh
    - Alternatively you can create the startup script by yourself and add the following: `java -jar SPPU.jar`
