@@ -8,6 +8,7 @@
 
 package com.osiris.SPPU.plugins;
 
+import com.osiris.SPPU.utils.GD;
 import com.osiris.SPPU.utils.UtilsFiles;
 import com.osiris.autoplug.core.logger.AL;
 import com.osiris.dyml.DYModule;
@@ -37,7 +38,7 @@ public class PluginManager {
         List<File> plJarFiles = fm.getAllPlugins();
 
         // Location where each plugin.yml file will be extracted to
-        File ymlFile = new File(System.getProperty("user.dir") + "/autoplug/system/plugin.yml");
+        File ymlFile = new File(GD.SPPU_DIR + "/plugin-temp.yml");
         byte[] buffer = new byte[1024];
 
         /*
@@ -137,6 +138,11 @@ public class PluginManager {
                     }
                     try {
                         if (fis != null) fis.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    try{
+                        ymlFile.delete();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

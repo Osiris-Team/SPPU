@@ -27,6 +27,8 @@ public class GD {
         PLUGINS_DIR = new File(WORKING_DIR + "/plugins");
         SPPU_DIR = new File(WORKING_DIR + "/SPPU");
         SPPU_DOWNLOADS_DIR = new File(SPPU_DIR + "/downloads");
+        SPPU_DIR.mkdirs();
+        SPPU_DOWNLOADS_DIR.mkdirs();
     }
 
 }
