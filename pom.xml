@@ -6,7 +6,7 @@
 
     <groupId>com.osiris</groupId>
     <artifactId>SPPU</artifactId>
-    <version>0.9</version>
+    <version>0.10</version>
     <packaging>jar</packaging>
 
     <name>SPPU</name>
@@ -33,7 +33,7 @@
         <dependency>
             <groupId>com.github.Osiris-Team</groupId>
             <artifactId>HBrowser</artifactId>
-            <version>2.3.3</version>
+            <version>3.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
