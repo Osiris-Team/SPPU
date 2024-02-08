@@ -10,15 +10,15 @@ package com.osiris.SPPU.plugins;
 
 import com.osiris.SPPU.utils.GD;
 import com.osiris.autoplug.core.logger.AL;
-import com.osiris.betterthread.BetterThread;
-import com.osiris.betterthread.BetterThreadManager;
+import com.osiris.betterthread.BThread;
+import com.osiris.betterthread.BThreadManager;
 import com.osiris.headlessbrowser.windows.PlaywrightWindow;
 
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
-public class TaskPremiumSpigotPluginDownload extends BetterThread {
+public class TaskPremiumSpigotPluginDownload extends BThread {
     private final String plName;
     private final String plLatestVersion;
     private final String url;
@@ -31,7 +31,7 @@ public class TaskPremiumSpigotPluginDownload extends BetterThread {
     private boolean isDownloadSuccessful;
     private boolean isInstallSuccessful;
 
-    public TaskPremiumSpigotPluginDownload(PlaywrightWindow window, String name, BetterThreadManager manager,
+    public TaskPremiumSpigotPluginDownload(PlaywrightWindow window, String name, BThreadManager manager,
                                            String plName, String plLatestVersion,
                                            String url, String profile, File finalDest) {
         this(window, name, manager, plName, plLatestVersion, url, profile, finalDest, null);
@@ -49,13 +49,13 @@ public class TaskPremiumSpigotPluginDownload extends BetterThread {
      * @param finalDest       the final download destination.
      * @param deleteDest      the file that should be deleted on a successful download. If null nothing gets deleted.
      */
-    public TaskPremiumSpigotPluginDownload(PlaywrightWindow window, String name, BetterThreadManager manager,
+    public TaskPremiumSpigotPluginDownload(PlaywrightWindow window, String name, BThreadManager manager,
                                            String plName, String plLatestVersion,
                                            String url, String profile, File finalDest, File deleteDest) {
         this(window, name, manager, plName, plLatestVersion, url, profile, finalDest, deleteDest, false);
     }
 
-    public TaskPremiumSpigotPluginDownload(PlaywrightWindow window, String name, BetterThreadManager manager,
+    public TaskPremiumSpigotPluginDownload(PlaywrightWindow window, String name, BThreadManager manager,
                                            String plName, String plLatestVersion,
                                            String url, String profile, File finalDest, File deleteDest,
                                            boolean isPremium) {

@@ -59,6 +59,16 @@
                 <artifactId>commons-io</artifactId>
                 <version>2.11.0</version>
             </dependency>
+            <dependency>
+                <groupId>com.github.Osiris-Team</groupId>
+                <artifactId>Better-Thread</artifactId>
+                <version>5.1.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains</groupId>
+                <artifactId>annotations</artifactId>
+                <version>23.0.0</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
@@ -74,6 +84,16 @@
             <groupId>com.github.Osiris-Team</groupId>
             <artifactId>HBrowser</artifactId>
             <version>3.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.Osiris-Team</groupId>
+            <artifactId>Dyml</artifactId>
+            <version>9.8.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.Osiris-Team</groupId>
+            <artifactId>Better-Thread</artifactId>
+            <version>5.1.2</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>

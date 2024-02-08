@@ -10,8 +10,9 @@ package com.osiris.SPPU.plugins;
 
 import com.osiris.SPPU.utils.GD;
 import com.osiris.autoplug.core.logger.AL;
-import com.osiris.betterthread.BetterThread;
-import com.osiris.betterthread.BetterThreadManager;
+import com.osiris.betterthread.BThreadManager;
+import com.osiris.betterthread.BThread;
+import com.osiris.betterthread.BThreadManager;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -26,7 +27,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.Random;
 
 
-public class TaskPluginDownload extends BetterThread {
+public class TaskPluginDownload extends BThread {
     private final String plName;
     private final String plLatestVersion;
     private final String url;
@@ -39,13 +40,13 @@ public class TaskPluginDownload extends BetterThread {
     private boolean isDownloadSuccessful;
     private boolean isInstallSuccessful;
 
-    public TaskPluginDownload(String name, BetterThreadManager manager,
+    public TaskPluginDownload(String name, BThreadManager manager,
                               String plName, String plLatestVersion,
                               String url, String profile, File finalDest) {
         this(name, manager, plName, plLatestVersion, url, false, profile, finalDest, null);
     }
 
-    public TaskPluginDownload(String name, BetterThreadManager manager,
+    public TaskPluginDownload(String name, BThreadManager manager,
                               String plName, String plLatestVersion,
                               String url, boolean ignoreContentType,
                               String profile, File finalDest) {
@@ -65,14 +66,14 @@ public class TaskPluginDownload extends BetterThread {
      * @param finalDest         the final download destination.
      * @param deleteDest        the file that should be deleted on a successful download. If null nothing gets deleted.
      */
-    public TaskPluginDownload(String name, BetterThreadManager manager,
+    public TaskPluginDownload(String name, BThreadManager manager,
                               String plName, String plLatestVersion,
                               String url, boolean ignoreContentType, String profile,
                               File finalDest, File deleteDest) {
         this(name, manager, plName, plLatestVersion, url, ignoreContentType, profile, finalDest, deleteDest, false);
     }
 
-    public TaskPluginDownload(String name, BetterThreadManager manager,
+    public TaskPluginDownload(String name, BThreadManager manager,
                               String plName, String plLatestVersion,
                               String url, boolean ignoreContentType, String profile,
                               File finalDest, File deleteDest,

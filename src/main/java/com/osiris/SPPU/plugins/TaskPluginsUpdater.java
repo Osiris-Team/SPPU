@@ -12,10 +12,10 @@ import com.osiris.SPPU.Main;
 import com.osiris.SPPU.plugins.search.SearchMaster;
 import com.osiris.SPPU.plugins.search.SearchResult;
 import com.osiris.SPPU.utils.GD;
-import com.osiris.betterthread.BetterThread;
-import com.osiris.betterthread.BetterThreadManager;
-import com.osiris.betterthread.BetterWarning;
-import com.osiris.dyml.DYModule;
+import com.osiris.betterthread.BThread;
+import com.osiris.betterthread.BThreadManager;
+import com.osiris.betterthread.BWarning;
+import com.osiris.dyml.YamlSection;
 import com.osiris.dyml.exceptions.DuplicateKeyException;
 import com.osiris.headlessbrowser.HBrowser;
 import com.osiris.headlessbrowser.windows.PlaywrightWindow;
@@ -32,7 +32,7 @@ import java.util.concurrent.Future;
 
 import static com.osiris.SPPU.utils.GD.CONFIG;
 
-public class TaskPluginsUpdater extends BetterThread {
+public class TaskPluginsUpdater extends BThread {
     //private final PluginsUpdateResultConnection con;
     private final String notifyProfile = "NOTIFY";
     private final String manualProfile = "MANUAL";
@@ -50,7 +50,7 @@ public class TaskPluginsUpdater extends BetterThread {
     private String pluginsConfigName;
     private int updatesAvailable = 0;
 
-    public TaskPluginsUpdater(String name, BetterThreadManager manager) {
+    public TaskPluginsUpdater(String name, BThreadManager manager) {
         super(name, manager);
     }
 
@@ -59,14 +59,14 @@ public class TaskPluginsUpdater extends BetterThread {
     public void runAtStart() throws Exception {
         CONFIG.load(); // No lock needed, since there are no other threads that access this file
         String name = CONFIG.getFileNameWithoutExt();
-        DYModule keep_removed = CONFIG.keep_removed;
-        DYModule profile = CONFIG.profile;
+        YamlSection keep_removed = CONFIG.keep_removed;
+        YamlSection profile = CONFIG.profile;
         this.userProfile = profile.asString();
-        DYModule async = CONFIG.async;
-        DYModule spigotUsername = CONFIG.spigotUsername;
-        DYModule spigotPassword = CONFIG.spigotPassword;
-        DYModule spigotUsernameOld = CONFIG.spigotUsernameOld;
-        DYModule spigotPasswordOld = CONFIG.spigotPasswordOld;
+        YamlSection async = CONFIG.async;
+        YamlSection spigotUsername = CONFIG.spigotUsername;
+        YamlSection spigotPassword = CONFIG.spigotPassword;
+        YamlSection spigotUsernameOld = CONFIG.spigotUsernameOld;
+        YamlSection spigotPasswordOld = CONFIG.spigotPasswordOld;
 
         PluginManager man = new PluginManager();
         this.allPlugins.addAll(man.getPlugins());
@@ -78,16 +78,16 @@ public class TaskPluginsUpdater extends BetterThread {
                     if (pl.getName() == null || pl.getName().isEmpty())
                         throw new Exception("The plugins name couldn't be determined for '" + pl.getInstallationPath() + "'!");
 
-                    DYModule exclude = CONFIG.put(name, plName, "exclude").setDefValues("false"); // Check this plugin?
-                    DYModule version = CONFIG.put(name, plName, "version").setDefValues(pl.getVersion());
-                    DYModule latestVersion = CONFIG.put(name, plName, "latest-version");
-                    DYModule author = CONFIG.put(name, plName, "author").setDefValues(pl.getAuthor());
-                    DYModule spigotId = CONFIG.put(name, plName, "spigot-id").setDefValues("0");
-                    //DYModule songodaId = new DYModule(config, getModules(), name, plName,+".songoda-id", 0); // TODO WORK_IN_PROGRESS
-                    DYModule bukkitId = CONFIG.put(name, plName, "bukkit-id").setDefValues("0");
-                    DYModule ignoreContentType = CONFIG.put(name, plName, "ignore-content-type").setDefValues("false");
-                    DYModule customCheckURL = CONFIG.put(name, plName, "custom-check-url");
-                    DYModule customDownloadURL = CONFIG.put(name, plName, "custom-download-url");
+                    YamlSection exclude = CONFIG.put(name, plName, "exclude").setDefValues("false"); // Check this plugin?
+                    YamlSection version = CONFIG.put(name, plName, "version").setDefValues(pl.getVersion());
+                    YamlSection latestVersion = CONFIG.put(name, plName, "latest-version");
+                    YamlSection author = CONFIG.put(name, plName, "author").setDefValues(pl.getAuthor());
+                    YamlSection spigotId = CONFIG.put(name, plName, "spigot-id").setDefValues("0");
+                    //YamlSection songodaId = new YamlSection(config, getModules(), name, plName,+".songoda-id", 0); // TODO WORK_IN_PROGRESS
+                    YamlSection bukkitId = CONFIG.put(name, plName, "bukkit-id").setDefValues("0");
+                    YamlSection ignoreContentType = CONFIG.put(name, plName, "ignore-content-type").setDefValues("false");
+                    YamlSection customCheckURL = CONFIG.put(name, plName, "custom-check-url");
+                    YamlSection customDownloadURL = CONFIG.put(name, plName, "custom-download-url");
 
                     // The plugin devs can add their spigot/bukkit ids to their plugin.yml files
                     if (pl.getSpigotId() != 0 && spigotId.asString() != null && spigotId.asInt() == 0) // Don't update the value, if the user has already set it
@@ -122,10 +122,10 @@ public class TaskPluginsUpdater extends BetterThread {
                     else
                         excludedPlugins.add(pl);
                 } catch (DuplicateKeyException e) {
-                    addWarning(new BetterWarning(this, e, "Duplicate plugin '" + pl.getName() + "' (or plugin name from its plugin.yml) found in your plugins directory. " +
+                    addWarning(new BWarning(this, e, "Duplicate plugin '" + pl.getName() + "' (or plugin name from its plugin.yml) found in your plugins directory. " +
                             "Its recommended to remove it."));
                 } catch (Exception e) {
-                    addWarning(new BetterWarning(this, e));
+                    addWarning(new BWarning(this, e));
                 }
             }
 
@@ -179,7 +179,7 @@ public class TaskPluginsUpdater extends BetterThread {
                     activeFutures.add(executorService.submit(() -> new SearchMaster().unknownSearch(pl)));
                 }
             } catch (Exception e) {
-                this.getWarnings().add(new BetterWarning(this, e, "Critical error while searching for update for '" + pl.getName() + "' plugin!"));
+                this.getWarnings().add(new BWarning(this, e, "Critical error while searching for update for '" + pl.getName() + "' plugin!"));
             }
         }
 
@@ -217,28 +217,28 @@ public class TaskPluginsUpdater extends BetterThread {
 
                 } else if (code == 2)
                     if (result.getException() != null)
-                        getWarnings().add(new BetterWarning(this, result.getException(), "There was an api-error for " + pl.getName() + "!"));
+                        getWarnings().add(new BWarning(this, result.getException(), "There was an api-error for " + pl.getName() + "!"));
                     else
-                        getWarnings().add(new BetterWarning(this, new Exception("There was an api-error for " + pl.getName() + "!")));
+                        getWarnings().add(new BWarning(this, new Exception("There was an api-error for " + pl.getName() + "!")));
                 else if (code == 3)
-                    getWarnings().add(new BetterWarning(this, new Exception("Plugin " + pl.getName() + " was not found by the search-algorithm! Specify an id in the plugins config file.")));
+                    getWarnings().add(new BWarning(this, new Exception("Plugin " + pl.getName() + " was not found by the search-algorithm! Specify an id in the plugins config file.")));
                 else
-                    getWarnings().add(new BetterWarning(this, new Exception("Unknown error occurred! Code: " + code + "."), "Notify the developers. Fastest way is through discord (https://discord.gg/GGNmtCC)."));
+                    getWarnings().add(new BWarning(this, new Exception("Unknown error occurred! Code: " + code + "."), "Notify the developers. Fastest way is through discord (https://discord.gg/GGNmtCC)."));
 
                 try {
-                    DYModule mSpigotId = CONFIG.get(pluginsConfigName, pl.getName(), "spigot-id");
+                    YamlSection mSpigotId = CONFIG.get(pluginsConfigName, pl.getName(), "spigot-id");
                     if (resultSpigotId != null
                             && (mSpigotId.asString() == null || mSpigotId.asInt() == 0)) // Because we can get a "null" string from the server
                         mSpigotId.setValues(resultSpigotId);
 
-                    DYModule mBukkitId = CONFIG.get(pluginsConfigName, pl.getName(), "bukkit-id");
+                    YamlSection mBukkitId = CONFIG.get(pluginsConfigName, pl.getName(), "bukkit-id");
                     if (resultBukkitId != null
                             && (mSpigotId.asString() == null || mSpigotId.asInt() == 0)) // Because we can get a "null" string from the server
                         mBukkitId.setValues(resultBukkitId);
 
                     // The config gets saved at the end of the runAtStart method.
                 } catch (Exception e) {
-                    getWarnings().add(new BetterWarning(this, e));
+                    getWarnings().add(new BWarning(this, e));
                 }
             }
         }
@@ -312,10 +312,10 @@ public class TaskPluginsUpdater extends BetterThread {
 
                             try {
                                 // Update the in-memory config
-                                DYModule mLatest = CONFIG.get(pluginsConfigName, pl.getName(), "latest-version");
+                                YamlSection mLatest = CONFIG.get(pluginsConfigName, pl.getName(), "latest-version");
                                 mLatest.setValues(result.getLatestVersion());
                             } catch (Exception e) {
-                                getWarnings().add(new BetterWarning(this, e));
+                                getWarnings().add(new BWarning(this, e));
                             }
 
                             if (userProfile.equals(notifyProfile)) {
@@ -335,12 +335,12 @@ public class TaskPluginsUpdater extends BetterThread {
                                         task.start();
                                     }
                                 } else
-                                    getWarnings().add(new BetterWarning(this, new Exception("Failed to download plugin update(" + latest + ") for " + pl.getName() + " because of unsupported type: " + type)));
+                                    getWarnings().add(new BWarning(this, new Exception("Failed to download plugin update(" + latest + ") for " + pl.getName() + " because of unsupported type: " + type)));
                             }
                         }
 
                     } catch (Exception e) {
-                        getWarnings().add(new BetterWarning(this, e, "Premium plugin '" + result.getPlugin().getName() + "' update to '" + result.getLatestVersion() + "' failed!"));
+                        getWarnings().add(new BWarning(this, e, "Premium plugin '" + result.getPlugin().getName() + "' update to '" + result.getLatestVersion() + "' failed!"));
                     }
                 }
 
@@ -378,7 +378,7 @@ public class TaskPluginsUpdater extends BetterThread {
                 }
 
             } catch (Exception e) {
-                getWarnings().add(new BetterWarning(this, e, "Error during premium plugins updating."));
+                getWarnings().add(new BWarning(this, e, "Error during premium plugins updating."));
             }
         }
 
@@ -400,10 +400,10 @@ public class TaskPluginsUpdater extends BetterThread {
 
             try {
                 // Update the in-memory config
-                DYModule mLatest = CONFIG.get(pluginsConfigName, pl.getName(), "latest-version");
+                YamlSection mLatest = CONFIG.get(pluginsConfigName, pl.getName(), "latest-version");
                 mLatest.setValues(latest); // Gets saved later
             } catch (Exception e) {
-                getWarnings().add(new BetterWarning(this, e));
+                getWarnings().add(new BWarning(this, e));
             }
 
             if (userProfile.equals(notifyProfile)) {
@@ -425,7 +425,7 @@ public class TaskPluginsUpdater extends BetterThread {
                         }
                     }
                 } else
-                    getWarnings().add(new BetterWarning(this, new Exception("Failed to download plugin update(" + latest + ") for " + pl.getName() + " because of unsupported type: " + type)));
+                    getWarnings().add(new BWarning(this, new Exception("Failed to download plugin update(" + latest + ") for " + pl.getName() + " because of unsupported type: " + type)));
             }
         }
 

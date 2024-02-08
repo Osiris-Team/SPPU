@@ -5,10 +5,10 @@ import com.osiris.autoplug.core.logger.AL;
 import com.osiris.autoplug.core.logger.LogFileWriter;
 import com.osiris.autoplug.core.logger.Message;
 import com.osiris.autoplug.core.logger.MessageFormatter;
-import com.osiris.betterthread.BetterThread;
-import com.osiris.betterthread.BetterThreadDisplayer;
-import com.osiris.betterthread.BetterThreadManager;
-import com.osiris.betterthread.BetterWarning;
+import com.osiris.betterthread.BThread;
+import com.osiris.betterthread.BThreadPrinter;
+import com.osiris.betterthread.BThreadManager;
+import com.osiris.betterthread.BWarning;
 import com.osiris.betterthread.exceptions.JLineLinkException;
 import com.osiris.dyml.exceptions.*;
 
@@ -24,7 +24,7 @@ import static com.osiris.SPPU.utils.GD.SPPU_DIR;
 public class Main {
     public static boolean isDEBUG;
 
-    public static void main(String[] args) throws NotLoadedException, IOException, IllegalKeyException, DuplicateKeyException, DYReaderException, IllegalListException, JLineLinkException, DYWriterException, InterruptedException {
+    public static void main(String[] args) throws NotLoadedException, IOException, IllegalKeyException, DuplicateKeyException, IllegalListException, JLineLinkException, InterruptedException, YamlReaderException, YamlWriterException {
         for (String arg :
                 args) {
             if (arg.equals("debug")) isDEBUG = true;
@@ -55,10 +55,8 @@ public class Main {
             System.out.println();
             System.out.println("Setup completed!");
         }
-        BetterThreadManager manager = new BetterThreadManager();
-        BetterThreadDisplayer displayer = new BetterThreadDisplayer(manager, "[SPPU]");
-        displayer.setShowWarnings(false);
-        displayer.setShowDetailedWarnings(false);
+        BThreadManager manager = new BThreadManager();
+        BThreadPrinter displayer = new BThreadPrinter(manager);
         displayer.start();
         new TaskPluginsUpdater("PluginsUpdater", manager).start();
 
@@ -68,8 +66,8 @@ public class Main {
         new Main().writeAndPrintResults(manager.getAll());
     }
 
-    private void writeAndPrintResults(List<BetterThread> all) {
-        for (BetterThread t :
+    private void writeAndPrintResults(List<BThread> all) {
+        for (BThread t :
                 all) {
             StringBuilder builder = new StringBuilder();
             if (t.isSuccess()) {
@@ -88,7 +86,7 @@ public class Main {
             LogFileWriter.writeToLog(MessageFormatter.formatForFile(
                     new Message(Message.Type.INFO, builder.toString())));
 
-            for (BetterWarning warning :
+            for (BWarning warning :
                     t.getWarnings()) {
                 AL.warn(warning.getException(), warning.getExtraInfo());
             }

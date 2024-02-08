@@ -1,17 +1,17 @@
 package com.osiris.SPPU;
 
-import com.osiris.SPPU.utils.GD;
-import com.osiris.dyml.DYModule;
-import com.osiris.dyml.DreamYaml;
+import com.osiris.SPPU.utils.GD;;
+import com.osiris.dyml.Yaml;
+import com.osiris.dyml.YamlSection;
 import com.osiris.dyml.exceptions.*;
 
 import java.io.IOException;
 
 
-public class Config extends DreamYaml {
-    public DYModule keep_removed, profile, async, spigotUsername, spigotPassword, spigotUsernameOld, spigotPasswordOld;
+public class Config extends Yaml {
+    public YamlSection keep_removed, profile, async, spigotUsername, spigotPassword, spigotUsernameOld, spigotPasswordOld;
 
-    public Config(String file) throws IOException, DuplicateKeyException, DYReaderException, IllegalListException, NotLoadedException, IllegalKeyException {
+    public Config(String file) throws IOException, DuplicateKeyException, IllegalListException, NotLoadedException, IllegalKeyException, YamlReaderException {
         super(file);
         this.load(); // No lock needed, since there are no other threads that access this file
         String name = this.getFileNameWithoutExt();
